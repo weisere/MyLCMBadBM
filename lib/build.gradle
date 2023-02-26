@@ -57,7 +57,7 @@ task customFatJar(type: Jar) {
     archiveVersion.set('')
     archiveClassifier.set('all-in-one')
     manifest {
-        attributes 'Main-Class': 'edu.touro.mco152.bm.App'
+        attributes 'Main-Class': 'lib.src.main.java.edu.touro.mco152.bm.App'
     }
 //    baseName = 'all-in-one-jar'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
