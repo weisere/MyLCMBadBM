@@ -42,15 +42,6 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-//
-//jar {
-//    manifest {
-//        attributes 'Main-Class': 'edu.touro.mco152.bm.App'
-//    }
-//    from {
-//        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-//    }
-//}
 
 task customFatJar(type: Jar) {
     archiveFileName.set('badbm.jar')
@@ -59,10 +50,14 @@ task customFatJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'lib.src.main.java.edu.touro.mco152.bm.App'
     }
-//    baseName = 'all-in-one-jar'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
+}
+
+//runs the custom fat jar task on build automatically
+tasks.named('build'){
+    dependsOn('customFatJar')
 }
 
 sourceSets  {
