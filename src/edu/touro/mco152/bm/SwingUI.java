@@ -66,8 +66,8 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterfa
     }
 
     @Override
-    public void _addPropertyChangeListener(PropertyChangeEvent event) {
-        addPropertyChangeListener((PropertyChangeListener) event);
+    public void _addPropertyChangeListener(PropertyChangeListener pcl) {
+        addPropertyChangeListener((PropertyChangeListener) pcl);
     }
 
     @Override
