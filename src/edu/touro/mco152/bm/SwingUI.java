@@ -14,10 +14,11 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterfa
 
     // Record any success or failure status returned from SwingWorker (might be us or super)
     Boolean lastStatus = null;  // so far unknown
+    DiskWorker DWWorker = new DiskWorker();
 
     @Override
     protected Boolean doInBackground() throws Exception {
-        return DiskWorker._doInBackground();//which will return a boolean
+        return DWWorker._doInBackground();//which will return a boolean
     }
 
     /**
