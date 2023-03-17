@@ -46,7 +46,6 @@ public class App {
     public static int numOfBlocks = 32;     // desired number of blocks
     public static int blockSizeKb = 512;    // size of a block in KBs
     //public static DiskWorker worker = null;
-    public static DiskWorker DWWorker = null;
     public static UIInterface UIWorker = null;//now takes our UIInterface
     public static int nextMarkNumber = 1;   // number of the next mark
     public static double wMax = -1, wMin = -1, wAvg = -1;
@@ -266,9 +265,6 @@ public class App {
 
         //4. set up disk worker thread and its event handlers
         UIWorker = new SwingUI();//hard coded to Swing
-        DWWorker.setUI(UIWorker);//Instantiates a DiskWorkers UI to be the above UIWorker
-//        UIWorker._addPropertyChangeListener(
-//                new PropertyChangeEvent("Hello", "Test","Final", "Try again"));
         UIWorker._addPropertyChangeListener((PropertyChangeEvent event) -> {
             switch (event.getPropertyName()) {
                 case "progress":

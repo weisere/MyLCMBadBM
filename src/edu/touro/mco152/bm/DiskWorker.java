@@ -39,7 +39,11 @@ import static edu.touro.mco152.bm.DiskMark.MarkType.WRITE;
 
 public class DiskWorker /*extends SwingWorker<Boolean, DiskMark>*/ {
 
-    private UIInterface ui;
+    private UIInterface ui = null;
+
+//    public DiskWorker(UIInterface ui){
+//        this.ui = ui;
+//    }
 
     public void setUI(UIInterface ui){
         this.ui = ui;
