@@ -1,6 +1,7 @@
 package edu.touro.mco152.bm;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * This is an interface that will contain all methods that the App class
@@ -12,7 +13,7 @@ public interface UIInterface {
 
     public void _cancel(boolean b);
 
-    public void _addPropertyChangeListener(PropertyChangeEvent event);
+    public void _addPropertyChangeListener(PropertyChangeListener pcl);
 
     public void _execute();
 
