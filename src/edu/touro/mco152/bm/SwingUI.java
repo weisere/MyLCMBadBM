@@ -3,12 +3,13 @@ package edu.touro.mco152.bm;
 import edu.touro.mco152.bm.ui.Gui;
 
 import javax.swing.*;
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static edu.touro.mco152.bm.App.dataDir;
 
-public class SwingUI extends SwingWorker<Boolean, DiskMark> {
+public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterface {
 
     // Record any success or failure status returned from SwingWorker (might be us or super)
     Boolean lastStatus = null;  // so far unknown
@@ -58,6 +59,33 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> {
     }
 
 
+    @Override
+    public void _cancel(boolean b) {
 
+    }
 
+    @Override
+    public void _addPropertyChangeListener(PropertyChangeEvent event) {
+
+    }
+
+    @Override
+    public void _execute() {
+
+    }
+
+    @Override
+    public boolean _isCancelled() {
+        return false;
+    }
+
+    @Override
+    public void _setProgress(int percentComplete) {
+
+    }
+
+    @Override
+    public void _publish(DiskMark wMark) {
+
+    }
 }
