@@ -4,6 +4,7 @@ import edu.touro.mco152.bm.ui.Gui;
 
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -16,8 +17,7 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterfa
 
     @Override
     protected Boolean doInBackground() throws Exception {
-        DiskWorker._doInBackground();
-        return null;
+        return DiskWorker._doInBackground();//which will return a boolean
     }
 
     /**
@@ -61,31 +61,31 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterfa
 
     @Override
     public void _cancel(boolean b) {
-
+        cancel(b);
     }
 
     @Override
     public void _addPropertyChangeListener(PropertyChangeEvent event) {
-
+        addPropertyChangeListener((PropertyChangeListener) event);
     }
 
     @Override
     public void _execute() {
-
+        execute();
     }
 
     @Override
     public boolean _isCancelled() {
-        return false;
+        return isCancelled();
     }
 
     @Override
     public void _setProgress(int percentComplete) {
-
+        setProgress(percentComplete);
     }
 
     @Override
     public void _publish(DiskMark wMark) {
-
+        publish(wMark);
     }
 }
