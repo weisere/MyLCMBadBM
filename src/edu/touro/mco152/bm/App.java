@@ -267,7 +267,9 @@ public class App {
         //4. set up disk worker thread and its event handlers
         UIWorker = new SwingUI();//hard coded to Swing
         DWWorker.setUI(UIWorker);//Instantiates a DiskWorkers UI to be the above UIWorker
-        UIWorker.addPropertyChangeListener((final PropertyChangeEvent event) -> {
+//        UIWorker._addPropertyChangeListener(
+//                new PropertyChangeEvent("Hello", "Test","Final", "Try again"));
+        UIWorker._addPropertyChangeListener((PropertyChangeEvent event) -> {
             switch (event.getPropertyName()) {
                 case "progress":
                     int value = (Integer) event.getNewValue();
