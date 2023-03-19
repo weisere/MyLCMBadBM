@@ -45,13 +45,7 @@ public class DiskWorker /*extends SwingWorker<Boolean, DiskMark>*/ {
         this.ui = ui;
     }
 
-//    public void setUI(UIInterface ui){
-//        this.ui = ui;
-//    }
 
-
-
-    //@Override
     protected Boolean _doInBackground() throws Exception {
 
         /*

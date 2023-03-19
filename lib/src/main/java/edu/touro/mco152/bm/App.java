@@ -265,8 +265,9 @@ public class App {
         Gui.mainFrame.adjustSensitivity();
 
         //4. set up disk worker thread and its event handlers
-        DWWorker = new DiskWorker(UIWorker = new SwingUI());
-        UIWorker.setDWWorkerForUI(DWWorker);
+        UIWorker = new SwingUI();
+        DWWorker = new DiskWorker(UIWorker);
+        UIWorker.setDiskWorkerForUI(DWWorker);
         UIWorker._addPropertyChangeListener((PropertyChangeEvent event) -> {
             switch (event.getPropertyName()) {
                 case "progress":

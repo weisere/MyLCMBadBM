@@ -17,7 +17,7 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterfa
     DiskWorker DWWorker = null;
 
     @Override
-    public void setDWWorkerForUI(DiskWorker DW){
+    public void setDiskWorkerForUI(DiskWorker DW){
         DWWorker = DW;
     }
 

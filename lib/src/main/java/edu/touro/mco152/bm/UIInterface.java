@@ -10,7 +10,6 @@ import java.beans.PropertyChangeListener;
  */
 public interface UIInterface {
 
-
     public void _cancel(boolean b);
 
     public void _addPropertyChangeListener(PropertyChangeListener pcl);
@@ -23,5 +22,5 @@ public interface UIInterface {
 
     public void _publish(DiskMark wMark);
 
-    public void setDWWorkerForUI(DiskWorker DW);
+    public void setDiskWorkerForUI(DiskWorker DW);
 }
