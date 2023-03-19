@@ -5,7 +5,7 @@ import java.beans.PropertyChangeListener;
 
 /**
  * This is an interface that will contain all methods that the App class
- * and DiskWorker class will need from a UI in order to display benchmark
+ * and DiskWorker class will need from a UI in order to display and benchmark
  * progress
  */
 public interface UIInterface {

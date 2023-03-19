@@ -10,6 +10,17 @@ import java.util.logging.Logger;
 
 import static edu.touro.mco152.bm.App.dataDir;
 
+/**
+ * SwingUI extends SwingWorker and implements the UIInterface
+ * It contains the required SwingWorker doInBackground() method
+ * and the process() and done() method
+ *<p>
+ * All UIInterface methods have been overridden and call the
+ * corresponding SwingWorker methods
+ *
+ * @implement UIInterface
+ * @extends SwingWorker
+ */
 public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterface {
 
     // Record any success or failure status returned from SwingWorker (might be us or super)
@@ -21,7 +32,17 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterfa
         DWWorker = DW;
     }
 
-
+    /**
+     * Required method of SwingWorker which calls the class
+     * instantiation of DiskWorkers' method _doInBackground()
+     * in which the benchmark is set and actually tested
+     *
+     * Returns a boolean of whether the benchmark was successful
+     * and an exception if access to any files does not work
+     *
+     * @return boolean
+     * @throws Exception
+     */
     @Override
     protected Boolean doInBackground() throws Exception {
         return DWWorker._doInBackground();//which will return a boolean
