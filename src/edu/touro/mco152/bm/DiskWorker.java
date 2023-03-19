@@ -41,13 +41,13 @@ public class DiskWorker /*extends SwingWorker<Boolean, DiskMark>*/ {
 
     private UIInterface ui = null;
 
-//    public DiskWorker(UIInterface ui){
-//        this.ui = ui;
-//    }
-
-    public void setUI(UIInterface ui){
+    public DiskWorker(UIInterface ui){
         this.ui = ui;
     }
+
+//    public void setUI(UIInterface ui){
+//        this.ui = ui;
+//    }
 
 
 

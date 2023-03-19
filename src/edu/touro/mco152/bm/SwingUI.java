@@ -16,11 +16,14 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterfa
     Boolean lastStatus = null;  // so far unknown
     DiskWorker DWWorker = null;
 
+    @Override
+    public void setDWWorkerForUI(DiskWorker DW){
+        DWWorker = DW;
+    }
+
 
     @Override
     protected Boolean doInBackground() throws Exception {
-        DWWorker = new DiskWorker();
-        DWWorker.setUI(this);
         return DWWorker._doInBackground();//which will return a boolean
     }
 

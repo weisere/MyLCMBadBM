@@ -22,4 +22,6 @@ public interface UIInterface {
     public void _setProgress(int percentComplete);
 
     public void _publish(DiskMark wMark);
+
+    public void setDWWorkerForUI(DiskWorker DW);
 }
