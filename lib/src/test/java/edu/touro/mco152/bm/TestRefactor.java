@@ -95,6 +95,4 @@ public class TestRefactor implements UIInterface{
         assertNotNull(wMark);
     }
 
-    @Override
-    public void setDiskWorkerForUI(DiskWorker DW) {}//no need for implementation for testing
 }
