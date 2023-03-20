@@ -10,9 +10,14 @@ import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// a Junit test that can start a benchmark; can determine during execution that the intermediate results
-// (e.g. percent-complete) look minimally valid; determine whether it completed OK or not; and can (at least minimally)
-// assert that it acted properly (e.g. produced some valid-looking results into DiskRun).
+/**
+ * Tests that show the benchmark can be run independent of
+ * the SwingUI. Proven using a very limited version of
+ * the benchmark being run using a stripped down UIInterface
+ * that has just enough to pass the tests
+ *
+ * @implement UIInterface
+ */
 public class TestRefactor implements UIInterface{
     int currentPercentComplete;
 
@@ -54,12 +59,6 @@ public class TestRefactor implements UIInterface{
         }
     }
 
-//    @Test
-//    public void test(){
-//        //setupDefaultAsPerProperties();
-//        assertTrue((BooleanSupplier) Gui.mainFrame.getProgressBar());
-//        System.out.println(Gui.progressBar.getAccessibleContext());
-//    }
 
     @Override
     public void _cancel(boolean b) {}//never called
