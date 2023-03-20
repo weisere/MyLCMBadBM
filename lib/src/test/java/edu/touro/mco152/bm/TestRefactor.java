@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @implement UIInterface
  */
 public class TestRefactor implements UIInterface{
-    int currentPercentComplete;
+    private int currentPercentComplete;
 
     public TestRefactor(){
         setupDefaultAsPerProperties();
@@ -70,7 +70,7 @@ public class TestRefactor implements UIInterface{
     @Override
     public void _execute() {
         try {
-            new DiskWorker(this)._doInBackground();
+            new DiskWorker()._doInBackground(this);
             assertEquals(100, currentPercentComplete);
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,11 +82,13 @@ public class TestRefactor implements UIInterface{
         return false;
     }
 
+
     @Override
     public void _setProgress(int percentComplete) {
         assertTrue(percentComplete >= 0 && percentComplete <= 100);
         currentPercentComplete = percentComplete;
     }
+
 
     @Override
     public void _publish(DiskMark wMark) {
