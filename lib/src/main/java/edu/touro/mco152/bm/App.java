@@ -127,7 +127,7 @@ public class App {
     }
 
     /**
-     * Loads most recent configuration settings from a file, and saves them to
+     * Loads most recent configuration settings from a file, nd saves them to
      * the local Properties field p
      */
     public static void loadConfig() {
