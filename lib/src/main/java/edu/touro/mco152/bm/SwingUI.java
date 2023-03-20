@@ -3,7 +3,6 @@ package edu.touro.mco152.bm;
 import edu.touro.mco152.bm.ui.Gui;
 
 import javax.swing.*;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.logging.Logger;
@@ -25,12 +24,12 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterfa
 
     // Record any success or failure status returned from SwingWorker (might be us or super)
     Boolean lastStatus = null;  // so far unknown
-    DiskWorker DWWorker = null;
+    DiskWorker dW = null;
 
-    @Override
-    public void setDiskWorkerForUI(DiskWorker DW){
-        DWWorker = DW;
+    public SwingUI(DiskWorker dw){
+        dW = dw;
     }
+
 
     /**
      * Required method of SwingWorker which calls the class
@@ -45,7 +44,7 @@ public class SwingUI extends SwingWorker<Boolean, DiskMark> implements UIInterfa
      */
     @Override
     protected Boolean doInBackground() throws Exception {
-        return DWWorker._doInBackground();//which will return a boolean
+        return dW._doInBackground(this);//which will return a boolean
     }
 
     /**
