@@ -60,9 +60,12 @@ tasks.named('build'){
     dependsOn('customFatJar')
 }
 
-sourceSets  {
-    // this may be needed to make entity classes visible to the persistence scanner
-    sourceSets.main.output.resourcesDir = sourceSets.main.java.outputDir
+sourceSets {
+    main {
+        java {
+            destinationDirectory.value(project.getLayout().getBuildDirectory().dir("classes/${sourceSets.main.name}/java"))
+        }
+    }
 }
 
 dependencies {
