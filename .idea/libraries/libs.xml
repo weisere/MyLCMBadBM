@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/eclipselink-3.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/derbyshared.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jfreechart-1.0.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/derby.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jakarta.persistence-api-3.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jcommon-1.0.21.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
