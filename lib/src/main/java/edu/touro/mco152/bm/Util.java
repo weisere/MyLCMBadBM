@@ -263,4 +263,7 @@ public class Util {
         }
         return "Generic " + devicePath;
     }
+
+    public static interface UIInterface {
+    }
 }
