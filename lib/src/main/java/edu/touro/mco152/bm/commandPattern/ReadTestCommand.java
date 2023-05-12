@@ -24,7 +24,7 @@ import static edu.touro.mco152.bm.DiskMark.MarkType.READ;
  *The ReadTestCommand Class is a concrete command that runs reading test benchmarking
  * It inherits from the ICommand interface
  *
- * The execute() method is never directly called, only the InvokeCommand class can call it
+ * The execute() method is never directly called, only the InvokeCommand class calls it
  *
  * It needs a UIInterface in order to run and other various parameters to decouple
  * the class from App. And allow for specific testing
@@ -50,8 +50,8 @@ public class ReadTestCommand implements ICommand {
     @Override
     public boolean execute() {
 
-                /*
-          init local vars that keep track of benchmarks, and a large read/write buffer
+        /*
+          init local vars that keep track of benchmarks
          */
         int rUnitsComplete = 0;
 

@@ -16,6 +16,10 @@ public class InvokeCommands {
         this.command = command;
     }
 
+    /*
+    *@return boolean
+    * return whether or not the command executed successfully
+     */
     public boolean invokeCommand(){
         return command.execute();
     }
