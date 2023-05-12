@@ -20,18 +20,43 @@ import static edu.touro.mco152.bm.App.*;
 import static edu.touro.mco152.bm.App.msg;
 import static edu.touro.mco152.bm.DiskMark.MarkType.WRITE;
 
-public class WriteTest {
+/*
+*The WriteTestCommand Class is a concrete command that runs writing test benchmarking
+* It inherits from the ICommand interface
+*
+* The execute() method is never directly called, only the InvokeCommand class can call it
+*
+* It needs a UIInterface in order to run and other various parameters to decouple
+* the class from App. And allow for specific testing
+ */
 
-    public boolean runWriteTest(UIInterface ui){
+public class WriteTestCommand implements ICommand {
+    public UIInterface ui;
+    public int marks;
+    public int diskBlocks;
+    public int sizeOfDiskBlocks;
+    public DiskRun.BlockSequence sequenceOfIOOperations;
+
+    public WriteTestCommand(UIInterface ui, int marks, int diskBlocks, int sizeOfDiskBlocks, DiskRun.BlockSequence sequenceOfIOOperations ){
+        this.ui = ui;
+        this.marks = marks;
+        this.diskBlocks = diskBlocks;
+        this.sizeOfDiskBlocks = sizeOfDiskBlocks;
+        this.sequenceOfIOOperations = sequenceOfIOOperations;
+    }
+
+    @Override
+    public boolean execute() {
         // declare local vars formerly in DiskWorker
 
-        int wUnitsComplete = 0,
-                rUnitsComplete = 0,
-                unitsComplete;
+        /*
+          init local vars that keep track of benchmarks, and a large read/write buffer
+         */
 
-        int wUnitsTotal = App.writeTest ? numOfBlocks * numOfMarks : 0;
-        int rUnitsTotal = App.readTest ? numOfBlocks * numOfMarks : 0;
-        int unitsTotal = wUnitsTotal + rUnitsTotal;
+        int wUnitsComplete = 0;
+
+        int wUnitsTotal = diskBlocks * marks;
+        //int rUnitsTotal = App.readTest ? numOfBlocks * numOfMarks : 0;
         float percentComplete;
 
         int blockSize = blockSizeKb*KILOBYTE;
@@ -43,11 +68,11 @@ public class WriteTest {
         }
 
         DiskMark wMark;
-        int startFileNum = App.nextMarkNumber;
-        DiskRun run = new DiskRun(DiskRun.IOMode.WRITE, App.blockSequence);
-        run.setNumMarks(App.numOfMarks);
-        run.setNumBlocks(App.numOfBlocks);
-        run.setBlockSize(App.blockSizeKb);
+        int startFileNum = nextMarkNumber;
+        DiskRun run = new DiskRun(DiskRun.IOMode.WRITE, sequenceOfIOOperations);
+        run.setNumMarks(marks);
+        run.setNumBlocks(diskBlocks);
+        run.setBlockSize(sizeOfDiskBlocks);
         run.setTxSize(App.targetTxSizeKb());
         run.setDiskInfo(Util.getDiskInfo(dataDir));
 
@@ -67,7 +92,7 @@ public class WriteTest {
               that keeps writing data (in its own loop - for specified # of blocks). Each 'Mark' is timed
               and is reported to the GUI for display as each Mark completes.
              */
-        for (int m = startFileNum; m < startFileNum + App.numOfMarks && !ui._isCancelled(); m++) {
+        for (int m = startFileNum; m < startFileNum + marks && !ui._isCancelled(); m++) {
 
             if (App.multiFile) {
                 testFile = new File(dataDir.getAbsolutePath()
@@ -85,9 +110,9 @@ public class WriteTest {
 
             try {
                 try (RandomAccessFile rAccFile = new RandomAccessFile(testFile, mode)) {
-                    for (int b = 0; b < numOfBlocks; b++) {
-                        if (App.blockSequence == DiskRun.BlockSequence.RANDOM) {
-                            int rLoc = Util.randInt(0, numOfBlocks - 1);
+                    for (int b = 0; b < diskBlocks; b++) {
+                        if (sequenceOfIOOperations == DiskRun.BlockSequence.RANDOM) {
+                            int rLoc = Util.randInt(0, diskBlocks - 1);
                             rAccFile.seek((long) rLoc * blockSize);
                         } else {
                             rAccFile.seek((long) b * blockSize);
@@ -95,8 +120,7 @@ public class WriteTest {
                         rAccFile.write(blockArr, 0, blockSize);
                         totalBytesWrittenInMark += blockSize;
                         wUnitsComplete++;
-                        unitsComplete = rUnitsComplete + wUnitsComplete;
-                        percentComplete = (float) unitsComplete / (float) unitsTotal * 100f;
+                        percentComplete = (float) wUnitsComplete / (float) wUnitsTotal * 100f;
 
                             /*
                               Report to GUI what percentage level of Entire BM (#Marks * #Blocks) is done.
@@ -143,7 +167,7 @@ public class WriteTest {
 
         Gui.runPanel.addRun(run);
 
-        App.nextMarkNumber += App.numOfMarks;
+        App.nextMarkNumber += marks;
         return true;
     }
 }

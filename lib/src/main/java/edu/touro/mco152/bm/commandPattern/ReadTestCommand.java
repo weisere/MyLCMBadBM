@@ -20,36 +20,60 @@ import java.util.logging.Logger;
 
 import static edu.touro.mco152.bm.App.*;
 import static edu.touro.mco152.bm.DiskMark.MarkType.READ;
+/*
+ *The ReadTestCommand Class is a concrete command that runs reading test benchmarking
+ * It inherits from the ICommand interface
+ *
+ * The execute() method is never directly called, only the InvokeCommand class can call it
+ *
+ * It needs a UIInterface in order to run and other various parameters to decouple
+ * the class from App. And allow for specific testing
+ */
 
-public class ReadTest {
+public class ReadTestCommand implements ICommand {
     // declare local vars formerly in DiskWorker
+    public UIInterface ui;
+    public int marks;
+    public int diskBlocks;
+    public int sizeOfDiskBlocks;
+    public DiskRun.BlockSequence sequenceOfIOOperations;
 
-    public boolean runReadTest(UIInterface ui){
-
-    int wUnitsComplete = 0,
-            rUnitsComplete = 0,
-            unitsComplete;
-
-    int wUnitsTotal = App.writeTest ? numOfBlocks * numOfMarks : 0;
-    int rUnitsTotal = App.readTest ? numOfBlocks * numOfMarks : 0;
-    int unitsTotal = wUnitsTotal + rUnitsTotal;
-    float percentComplete;
-
-    int blockSize = blockSizeKb*KILOBYTE;
-    byte [] blockArr = new byte [blockSize];
-for (int b=0; b<blockArr.length; b++) {
-        if (b%2==0) {
-            blockArr[b]=(byte)0xFF;
-        }
+    public ReadTestCommand(UIInterface ui, int marks, int diskBlocks, int sizeOfDiskBlocks, DiskRun.BlockSequence sequenceOfIOOperations ){
+        this.ui = ui;
+        this.marks = marks;
+        this.diskBlocks = diskBlocks;
+        this.sizeOfDiskBlocks = sizeOfDiskBlocks;
+        this.sequenceOfIOOperations = sequenceOfIOOperations;
     }
 
-    DiskMark rMark;
-    int startFileNum = App.nextMarkNumber;
-//           if (App.readTest) {
-        DiskRun run = new DiskRun(DiskRun.IOMode.READ, App.blockSequence);
-        run.setNumMarks(App.numOfMarks);
-        run.setNumBlocks(App.numOfBlocks);
-        run.setBlockSize(App.blockSizeKb);
+
+    @Override
+    public boolean execute() {
+
+                /*
+          init local vars that keep track of benchmarks, and a large read/write buffer
+         */
+        int rUnitsComplete = 0;
+
+
+
+        int rUnitsTotal =  diskBlocks * marks;
+        float percentComplete;
+
+        int blockSize = blockSizeKb*KILOBYTE;
+        byte [] blockArr = new byte [blockSize];
+        for (int b=0; b<blockArr.length; b++) {
+            if (b%2==0) {
+                blockArr[b]=(byte)0xFF;
+            }
+        }
+
+        DiskMark rMark;
+        int startFileNum = App.nextMarkNumber;
+        DiskRun run = new DiskRun(DiskRun.IOMode.READ, sequenceOfIOOperations);
+        run.setNumMarks(marks);
+        run.setNumBlocks(diskBlocks);
+        run.setBlockSize(sizeOfDiskBlocks);
         run.setTxSize(App.targetTxSizeKb());
         run.setDiskInfo(Util.getDiskInfo(dataDir));
 
@@ -58,7 +82,7 @@ for (int b=0; b<blockArr.length; b++) {
         Gui.chartPanel.getChart().getTitle().setVisible(true);
         Gui.chartPanel.getChart().getTitle().setText(run.getDiskInfo());
 
-        for (int m = startFileNum; m < startFileNum + App.numOfMarks && !ui._isCancelled(); m++) {
+        for (int m = startFileNum; m < startFileNum + marks && !ui._isCancelled(); m++) {
 
             if (App.multiFile) {
                 testFile = new File(dataDir.getAbsolutePath()
@@ -71,9 +95,9 @@ for (int b=0; b<blockArr.length; b++) {
 
             try {
                 try (RandomAccessFile rAccFile = new RandomAccessFile(testFile, "r")) {
-                    for (int b = 0; b < numOfBlocks; b++) {
-                        if (App.blockSequence == DiskRun.BlockSequence.RANDOM) {
-                            int rLoc = Util.randInt(0, numOfBlocks - 1);
+                    for (int b = 0; b < diskBlocks; b++) {
+                        if (sequenceOfIOOperations == DiskRun.BlockSequence.RANDOM) {
+                            int rLoc = Util.randInt(0, diskBlocks - 1);
                             rAccFile.seek((long) rLoc * blockSize);
                         } else {
                             rAccFile.seek((long) b * blockSize);
@@ -81,8 +105,7 @@ for (int b=0; b<blockArr.length; b++) {
                         rAccFile.readFully(blockArr, 0, blockSize);
                         totalBytesReadInMark += blockSize;
                         rUnitsComplete++;
-                        unitsComplete = rUnitsComplete + wUnitsComplete;
-                        percentComplete = (float) unitsComplete / (float) unitsTotal * 100f;
+                        percentComplete = (float) rUnitsComplete / (float) rUnitsTotal * 100f;
                         ui._setProgress((int) percentComplete);
                     }
                 }
@@ -120,8 +143,7 @@ for (int b=0; b<blockArr.length; b++) {
 
         Gui.runPanel.addRun(run);
 
-        App.nextMarkNumber += App.numOfMarks;
+        App.nextMarkNumber += marks;
         return true;
-}
-
+    }
 }
