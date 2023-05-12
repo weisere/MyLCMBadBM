@@ -1,7 +1,9 @@
 package edu.touro.mco152.bm;
 
-import edu.touro.mco152.bm.commandPattern.ReadTest;
-import edu.touro.mco152.bm.commandPattern.WriteTest;
+import edu.touro.mco152.bm.commandPattern.InvokeCommands;
+import edu.touro.mco152.bm.commandPattern.ReadTestCommand;
+import edu.touro.mco152.bm.commandPattern.WriteTestCommand;
+import edu.touro.mco152.bm.persist.DiskRun;
 import edu.touro.mco152.bm.ui.Gui;
 import edu.touro.mco152.bm.ui.MainFrame;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests that shows that the read and write functionality
- * (which was split made into commands) runs properly
+ * (which was split made into separate commands) runs properly
+ *
+ * The commands are executed using the InvokeCommands Class
+ * also showing it is functional and working
  *
  * Made a "Dumbed down" version of an interface in order to properly
  * test code. The main test which shows read and write are functional
@@ -22,15 +27,19 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @implement UIInterface
  */
-public class WriteReadSplitTest implements UIInterface{
+public class WriteReadCommandTest implements UIInterface{
     private int currentPercentComplete;
-    ReadTest rt;
-    WriteTest wt;
+    ReadTestCommand rt;
+    WriteTestCommand wt;
+    InvokeCommands invoker;
 
-    public WriteReadSplitTest(){
+    //num files: 25, num blks: 128, blk size (kb): 2048, blockSequence: SEQUENTIAL
+
+    public WriteReadCommandTest(){
         setupDefaultAsPerProperties();
-        ReadTest rt = new ReadTest();
-        WriteTest wt = new WriteTest();
+        rt = new ReadTestCommand(this, 25,128,2048, DiskRun.BlockSequence.SEQUENTIAL);
+        wt = new WriteTestCommand(this, 25,128,2048, DiskRun.BlockSequence.SEQUENTIAL);
+        invoker = new InvokeCommands();
     }
     /**
      * Bruteforce setup of static classes/fields to allow DiskWorker to run.
@@ -78,13 +87,15 @@ public class WriteReadSplitTest implements UIInterface{
     @Override
     public void _execute() {
         try {
-            rt.runReadTest(this);
+            invoker.setCommand(wt);
+            invoker.invokeCommand();
             assertEquals(100, currentPercentComplete);
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            wt.runWriteTest(this);
+            invoker.setCommand(rt);
+            invoker.invokeCommand();
             assertEquals(100, currentPercentComplete);
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,8 +110,8 @@ public class WriteReadSplitTest implements UIInterface{
 
     @Override
     public void _setProgress(int percentComplete) {
-        assertTrue(percentComplete >= 0 && percentComplete <= 100);
-        currentPercentComplete = percentComplete;
+       assertTrue(percentComplete >= 0 && percentComplete <= 100);
+       currentPercentComplete = percentComplete;
     }
 
 
