@@ -2,11 +2,14 @@ package edu.touro.mco152.bm.commandPattern;
 
 import edu.touro.mco152.bm.App;
 import edu.touro.mco152.bm.DiskMark;
+import edu.touro.mco152.bm.ObserverPattern.*;
 import edu.touro.mco152.bm.UIInterface;
 import edu.touro.mco152.bm.Util;
+import edu.touro.mco152.bm.persist.DatabaseObserver;
 import edu.touro.mco152.bm.persist.DiskRun;
 import edu.touro.mco152.bm.persist.EM;
 import edu.touro.mco152.bm.ui.Gui;
+import edu.touro.mco152.bm.ui.GuiObserver;
 import jakarta.persistence.EntityManager;
 
 import javax.swing.*;
@@ -14,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,9 +32,12 @@ import static edu.touro.mco152.bm.DiskMark.MarkType.READ;
  *
  * It needs a UIInterface in order to run and other various parameters to decouple
  * the class from App. And allow for specific testing
+ *
+ * Extends the Subject Abstract to have all the functionality a Subject would need to add and notify observers
+ *
  */
 
-public class ReadTestCommand implements ICommand {
+public class ReadTestCommand extends SubjectAbstract implements ICommand {
     // declare local vars formerly in DiskWorker
     public UIInterface ui;
     public int marks;
@@ -44,6 +51,13 @@ public class ReadTestCommand implements ICommand {
         this.diskBlocks = diskBlocks;
         this.sizeOfDiskBlocks = sizeOfDiskBlocks;
         this.sequenceOfIOOperations = sequenceOfIOOperations;
+        // instantiates observerList and adds the various observers
+        // slack observer is attached later
+        observerList = new ArrayList<>();
+        attach(new DatabaseObserver());
+        attach(new GuiObserver());
+
+
     }
 
 
@@ -133,17 +147,18 @@ public class ReadTestCommand implements ICommand {
             run.setEndTime(new Date());
         }
 
-            /*
-              Persist info about the Read BM Run (e.g. into Derby Database) and add it to a GUI panel
-             */
-        EntityManager em = EM.getEntityManager();
-        em.getTransaction().begin();
-        em.persist(run);
-        em.getTransaction().commit();
+        /* attaching the slack observer here so can also have access to run information to create rule */
+        attach(new RulesObserver(new SlackObserver(), run.getRunMax() > ((run.getRunAvg()*.03)+run.getRunAvg())));
 
-        Gui.runPanel.addRun(run);
+
+        /*
+         notifies all observers attached in the constructor
+         */
+        notifyObservers(run);
 
         App.nextMarkNumber += marks;
         return true;
     }
+
+
 }
