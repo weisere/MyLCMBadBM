@@ -44,7 +44,7 @@ public class WriteTestCommand extends SubjectAbstract implements ICommand{
     public int diskBlocks;
     public int sizeOfDiskBlocks;
     public DiskRun.BlockSequence sequenceOfIOOperations;
-    //public ArrayList<IObserve> observerList;//list of observers
+
 
     public WriteTestCommand(UIInterface ui, int marks, int diskBlocks, int sizeOfDiskBlocks, DiskRun.BlockSequence sequenceOfIOOperations ){
         this.ui = ui;

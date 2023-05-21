@@ -4,8 +4,9 @@ import edu.touro.mco152.bm.persist.DiskRun;
 
 import java.util.ArrayList;
 /*
-*Abstract Class that contains all the functionality and the one
-* parameter that would be needed to implement the ISubject Interface
+*Abstract Class that contains all the functionality and an
+* observer list that would be needed to leverage the
+* functionality of the ISubject Interface
  */
 public abstract class SubjectAbstract implements ISubject {
     public ArrayList<IObserve> observerList;
