@@ -2,9 +2,7 @@ package edu.touro.mco152.bm.commandPattern;
 
 import edu.touro.mco152.bm.App;
 import edu.touro.mco152.bm.DiskMark;
-import edu.touro.mco152.bm.ObserverPattern.IObserve;
-import edu.touro.mco152.bm.ObserverPattern.ISubject;
-import edu.touro.mco152.bm.ObserverPattern.SubjectAbstract;
+import edu.touro.mco152.bm.ObserverPattern.*;
 import edu.touro.mco152.bm.UIInterface;
 import edu.touro.mco152.bm.Util;
 import edu.touro.mco152.bm.persist.DatabaseObserver;
@@ -46,7 +44,6 @@ public class ReadTestCommand extends SubjectAbstract implements ICommand {
     public int diskBlocks;
     public int sizeOfDiskBlocks;
     public DiskRun.BlockSequence sequenceOfIOOperations;
-    //public ArrayList<IObserve> observerList;//list of observers
 
     public ReadTestCommand(UIInterface ui, int marks, int diskBlocks, int sizeOfDiskBlocks, DiskRun.BlockSequence sequenceOfIOOperations ){
         this.ui = ui;
@@ -54,12 +51,12 @@ public class ReadTestCommand extends SubjectAbstract implements ICommand {
         this.diskBlocks = diskBlocks;
         this.sizeOfDiskBlocks = sizeOfDiskBlocks;
         this.sequenceOfIOOperations = sequenceOfIOOperations;
-        /*
-        instantiates observerList and adds the various observers
-         */
+        // instantiates observerList and adds the various observers
+        // slack observer is attached later
         observerList = new ArrayList<>();
         attach(new DatabaseObserver());
         attach(new GuiObserver());
+
 
     }
 
@@ -149,6 +146,9 @@ public class ReadTestCommand extends SubjectAbstract implements ICommand {
             run.setRunAvg(rMark.getCumAvg());
             run.setEndTime(new Date());
         }
+
+        /* attaching the slack observer here so can also have access to run information to create rule */
+        attach(new RulesObserver(new SlackObserver(), run.getRunMax() > ((run.getRunAvg()*.03)+run.getRunAvg())));
 
 
         /*
